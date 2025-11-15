@@ -1,5 +1,4 @@
 import ut from "../js/utils.js";
-import Init from "./init.jsx";
 import { useState } from "react";
 function App() {
   const [initialised, setInitialised] = useState(false);
@@ -11,8 +10,15 @@ function App() {
     setInitialised(true);
     setDif(dif);
   }
-
-  if (initialised) return <Init></Init>;
+  if (!initialised)
+    return (
+      <div>
+        <h1>Select a difficulty</h1>
+        <button onClick={() => handleInit("hard")}>Hard</button>
+        <button onClick={() => handleInit("medium")}>Medium</button>
+        <button onClick={() => handleInit("easy")}>Easy</button>
+      </div>
+    );
   return (
     <>
       <div className="top"></div>
