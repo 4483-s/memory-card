@@ -7,14 +7,28 @@ async function getChar(id) {
   const obj = await res.json();
   return {
     name: obj.name,
-    id: obj.id,
     imgUrl: obj.sprites.other["official-artwork"].front_default,
-    imgUrlBak: obj.sprites.other.dream_world.front_default,
   };
 }
-const five = await getChar(100);
-console.log(five);
+async function fetchItems(start, count) {
+  const arr = [];
+  for (let i = start; i < start + count; i++) {
+    const char = await getChar(i);
+    arr.push(char);
+  }
+  return arr;
+}
+function randomiseArray(arr) {
+  const cp = [...arr];
+  for (let i = 0; i < arr.length; i++) {
+    const j = Math.floor(Math.random() * arr.length);
+    [cp[i], cp[j]] = [cp[j], cp[i]];
+  }
+  return cp;
+}
 export default {
   oneTo500,
   getChar,
+  fetchItems,
+  randomiseArray,
 };

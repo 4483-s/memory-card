@@ -1,8 +1,10 @@
-import ut from "../js/utils.js";
+import ut from "../scripts/utils.js";
+import Cardbox from "./cardbox.jsx";
 import { useState } from "react";
 function App() {
   const [initialised, setInitialised] = useState(false);
   const [dif, setDif] = useState("easy");
+  Cardbox();
   function handleDif(dif) {
     setDif(dif);
   }
@@ -23,7 +25,7 @@ function App() {
     <>
       <div className="top"></div>
       <div className="bottom">
-        <div className="cardbox"></div>
+        <Cardbox mode={dif}></Cardbox>
       </div>
     </>
   );
