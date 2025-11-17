@@ -1,13 +1,19 @@
-import ut from "../scripts/utils.js";
 import Cardbox from "./cardbox.jsx";
 import { useState } from "react";
 import dummy from "../scripts/dummy.json";
 console.log(dummy);
 function App() {
-  const easyCount = 15;
-  const mediumCount = 20;
-  const hardCount = 40;
+  // used only once
   const [initialised, setInitialised] = useState(false);
+  function handleInit(dif) {
+    setInitialised(true);
+    setDif(dif);
+  }
+  //
+  //
+  // const easyCount = 15;
+  // const mediumCount = 20;
+  // const hardCount = 40;
   const [dif, setDif] = useState("easy");
   const [currentRecord, setCurrentRecord] = useState(new Set());
   function handleImgClick(url) {
@@ -19,10 +25,6 @@ function App() {
   }
   function handleDifChange(dif) {
     setCurrentRecord(new Set());
-    setDif(dif);
-  }
-  function handleInit(dif) {
-    setInitialised(true);
     setDif(dif);
   }
   if (!initialised)

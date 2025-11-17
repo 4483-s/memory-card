@@ -18,6 +18,9 @@ async function fetchItems(start, count) {
   }
   return arr;
 }
+function randomIndex(arr) {
+  return Math.floor(Math.random() * arr.length);
+}
 // import fs from "fs/promises";
 // const result = await fetchItems(8, 12);
 // fs.writeFile("./dummy.json", JSON.stringify(result));
@@ -25,14 +28,33 @@ async function fetchItems(start, count) {
 function randomiseArray(arr) {
   const cp = [...arr];
   for (let i = 0; i < arr.length; i++) {
-    const j = Math.floor(Math.random() * arr.length);
+    const j = randomIndex(arr);
     [cp[i], cp[j]] = [cp[j], cp[i]];
   }
   return cp;
+}
+// make sure at least one displayed item should be displayed at a time
+function getItemsToDisplay(list, clickRecord, displayCount) {
+  const notClicked = [];
+  for (const i of list) {
+    if (!clickRecord.has(i)) notClicked.push(i);
+  }
+  if (!notClicked.length)
+    return randomiseArray(list).slice(0, displayCount + 1);
+
+  const random = randomIndex(notClicked);
+  const listWithoutSelected = list.filter((v) => v !== notClicked[random]);
+  const randomised = randomiseArray(listWithoutSelected).slice(
+    0,
+    displayCount + 1,
+  );
+  randomised[randomIndex(randomised)] = notClicked[random];
+  return randomised;
 }
 export default {
   oneTo500,
   getChar,
   fetchItems,
   randomiseArray,
+  getItemsToDisplay,
 };
