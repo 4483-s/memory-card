@@ -7,7 +7,7 @@ async function getChar(id) {
   const obj = await res.json();
   return {
     name: obj.name,
-    imgUrl: obj.sprites.other["official-artwork"].front_default,
+    url: obj.sprites.other["official-artwork"].front_default,
   };
 }
 async function fetchItems(start, count) {
@@ -18,6 +18,10 @@ async function fetchItems(start, count) {
   }
   return arr;
 }
+// import fs from "fs/promises";
+// const result = await fetchItems(8, 12);
+// fs.writeFile("./dummy.json", JSON.stringify(result));
+// console.log(result);
 function randomiseArray(arr) {
   const cp = [...arr];
   for (let i = 0; i < arr.length; i++) {

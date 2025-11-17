@@ -1,11 +1,24 @@
 import ut from "../scripts/utils.js";
 import Cardbox from "./cardbox.jsx";
 import { useState } from "react";
+import dummy from "../scripts/dummy.json";
+console.log(dummy);
 function App() {
+  const easyCount = 15;
+  const mediumCount = 20;
+  const hardCount = 40;
   const [initialised, setInitialised] = useState(false);
   const [dif, setDif] = useState("easy");
-  Cardbox();
-  function handleDif(dif) {
+  const [currentRecord, setCurrentRecord] = useState(new Set());
+  function handleImgClick(url) {
+    const newSet = new Set(currentRecord);
+    if (newSet.has(url)) newSet.clear();
+    else newSet.add(url);
+
+    setCurrentRecord(newSet);
+  }
+  function handleDifChange(dif) {
+    setCurrentRecord(new Set());
     setDif(dif);
   }
   function handleInit(dif) {
@@ -23,9 +36,15 @@ function App() {
     );
   return (
     <>
-      <div className="top"></div>
+      <div className="top">
+        <div>
+          <button onClick={() => handleDifChange("hard")}>Hard</button>
+          <button onClick={() => handleDifChange("medium")}>Medium</button>
+          <button onClick={() => handleDifChange("easy")}>Easy</button>
+        </div>
+      </div>
       <div className="bottom">
-        <Cardbox mode={dif}></Cardbox>
+        <Cardbox list={dummy} handleImgClick={handleImgClick}></Cardbox>
       </div>
     </>
   );
