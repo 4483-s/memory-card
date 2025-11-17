@@ -1,25 +1,27 @@
 import ut from "../scripts/utils.js";
 import { useState } from "react";
+
 // import Card from "./card.jsx";
-export default function Cardbox({ list }) {
-  const [score, setScore] = useState(0);
-  const record = new Set();
-  function handleClick(e) {
-    record.add(e.target.src);
+export default function Cardbox({ list, reportState }) {
+  const [record, setRecord] = useState(new Set());
+  function handleClick(url) {
+    const newSet = new Set(record);
+    if (newSet.has(url)) newSet.clear();
+    else newSet.add(url);
+
+    setRecord(newSet);
   }
+  reportState(Array.from(record).length);
   return (
     <div>
-      {list.map((v) => {
-        <Card url={v.url} alt={v.name} onClick={handleClick}></Card>;
+      {ut.randomiseArray(list).map((v) => {
+        return (
+          <div className="card" onClick={() => handleClick(v.url)}>
+            <img src={v.url} alt={v.name} />
+            <p>{v.name}</p>
+          </div>
+        );
       })}
-    </div>
-  );
-}
-function Card({ url, name, onClick }) {
-  return (
-    <div className="card" onClick={onClick}>
-      <img src={url} alt={name} />
-      <p>{name}</p>
     </div>
   );
 }
