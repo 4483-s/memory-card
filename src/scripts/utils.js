@@ -54,8 +54,8 @@ function getItemsToDisplay(list, clickRecord, displayCount) {
 async function getLists() {
   const obj = {};
   obj.easy = await fetchItems(1, 12);
-  obj.medium = await fetchItems(1, 20);
-  obj.hard = await fetchItems(1, 40);
+  obj.medium = await fetchItems(100, 20);
+  obj.hard = await fetchItems(300, 40);
   return obj;
 }
 export default {

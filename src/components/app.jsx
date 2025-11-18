@@ -1,13 +1,17 @@
 import Cardbox from "./cardbox.jsx";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import dummy from "../scripts/dummy.json";
 import utils from "../scripts/utils.js";
 console.log(dummy);
 function App() {
   const [dif, setDif] = useState("easy");
   const [currentRecord, setCurrentRecord] = useState(new Set());
-  const [currentList, setCurrentList] = useState(null);
-  const lists = useRef(null);
+  // const [currentList, setCurrentList] = useState(null);
+  const [lists, setLists] = useState(null);
+  // TODO
+  // get one list at a time to fix performance issue
+  if (!lists) utils.getLists().then((v) => setLists(v));
+
   function handleImgClick(url) {
     const newSet = new Set(currentRecord);
     if (newSet.has(url)) newSet.clear();
@@ -20,12 +24,16 @@ function App() {
     setDif(dif);
   }
   // used only once
+  //
+  //
+  //
+  //
+  //
   const [initialised, setInitialised] = useState(false);
   function handleInit(dif) {
     setInitialised(true);
     setDif(dif);
   }
-  console.log(lists.current);
   if (!initialised) {
     return (
       <div>
@@ -37,17 +45,33 @@ function App() {
     );
   }
   //
+  //
+  //
+  //
   return (
     <>
       <div className="top">
-        <div>
-          <button onClick={() => handleDifChange("hard")}>Hard</button>
-          <button onClick={() => handleDifChange("medium")}>Medium</button>
-          <button onClick={() => handleDifChange("easy")}>Easy</button>
+        <h1 className="title">Title</h1>
+        <div className="buttons">
+          <button onClick={() => handleDifChange("hard")}>
+            <h3>Hard</h3>
+            <p>best:</p>
+          </button>
+          <button onClick={() => handleDifChange("medium")}>
+            <h3>Medium</h3>
+            <p>best:</p>
+          </button>
+          <button onClick={() => handleDifChange("easy")}>
+            <h3>Easy</h3>
+            <p>best:</p>
+          </button>
         </div>
       </div>
       <div className="bottom">
-        <Cardbox list={dummy} handleImgClick={handleImgClick}></Cardbox>
+        <Cardbox
+          list={!lists ? null : lists[dif]}
+          handleImgClick={handleImgClick}
+        ></Cardbox>
       </div>
     </>
   );
