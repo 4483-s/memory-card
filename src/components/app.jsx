@@ -1,21 +1,13 @@
 import Cardbox from "./cardbox.jsx";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import dummy from "../scripts/dummy.json";
+import utils from "../scripts/utils.js";
 console.log(dummy);
 function App() {
-  // used only once
-  const [initialised, setInitialised] = useState(false);
-  function handleInit(dif) {
-    setInitialised(true);
-    setDif(dif);
-  }
-  //
-  //
-  // const easyCount = 15;
-  // const mediumCount = 20;
-  // const hardCount = 40;
   const [dif, setDif] = useState("easy");
   const [currentRecord, setCurrentRecord] = useState(new Set());
+  const [currentList, setCurrentList] = useState(null);
+  const lists = useRef(null);
   function handleImgClick(url) {
     const newSet = new Set(currentRecord);
     if (newSet.has(url)) newSet.clear();
@@ -27,7 +19,14 @@ function App() {
     setCurrentRecord(new Set());
     setDif(dif);
   }
-  if (!initialised)
+  // used only once
+  const [initialised, setInitialised] = useState(false);
+  function handleInit(dif) {
+    setInitialised(true);
+    setDif(dif);
+  }
+  console.log(lists.current);
+  if (!initialised) {
     return (
       <div>
         <h1>Select a difficulty</h1>
@@ -36,6 +35,8 @@ function App() {
         <button onClick={() => handleInit("easy")}>Easy</button>
       </div>
     );
+  }
+  //
   return (
     <>
       <div className="top">

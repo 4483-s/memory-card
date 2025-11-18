@@ -51,10 +51,18 @@ function getItemsToDisplay(list, clickRecord, displayCount) {
   randomised[randomIndex(randomised)] = notClicked[random];
   return randomised;
 }
+async function getLists() {
+  const obj = {};
+  obj.easy = await fetchItems(1, 12);
+  obj.medium = await fetchItems(1, 20);
+  obj.hard = await fetchItems(1, 40);
+  return obj;
+}
 export default {
   oneTo500,
   getChar,
   fetchItems,
   randomiseArray,
   getItemsToDisplay,
+  getLists,
 };
