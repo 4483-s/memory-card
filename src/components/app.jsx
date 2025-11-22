@@ -6,11 +6,11 @@ console.log(dummy);
 function App() {
   const [dif, setDif] = useState("easy");
   const [currentRecord, setCurrentRecord] = useState(new Set());
-  const [currentList, setCurrentList] = useState(null);
-
+  const [, forceRender] = useState(0);
   const li = useRef({});
-  // TODO
-  // get one list at a time to fix performance issue
+
+  const rerender = () => forceRender((x) => x + 1);
+
   if (!li.current.easy) {
     utils.fetchItems(1, 12).then(promiseHandler);
   }
@@ -24,7 +24,7 @@ function App() {
     let difToSet =
       v.length === 12 ? "easy" : v.length === 20 ? "medium" : "hard";
     li.current[difToSet] = v;
-    if (dif === difToSet) setCurrentList(li.current[difToSet]);
+    if (difToSet === dif) rerender();
   }
 
   function handleImgClick(url) {
@@ -34,11 +34,12 @@ function App() {
 
     setCurrentRecord(newSet);
   }
-  function handleDifChange(dif) {
+  function handleDifChange(difarg) {
+    if (difarg === dif) return;
     setCurrentRecord(new Set());
-    setDif(dif);
-    setCurrentList(li.current[dif]);
+    setDif(difarg);
   }
+
   // used only once
   //
   //
@@ -84,7 +85,10 @@ function App() {
         </div>
       </div>
       <div className="bottom">
-        <Cardbox list={currentList} handleImgClick={handleImgClick}></Cardbox>
+        <Cardbox
+          list={li.current[dif]}
+          handleImgClick={handleImgClick}
+        ></Cardbox>
       </div>
     </>
   );
