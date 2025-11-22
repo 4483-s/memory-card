@@ -1,16 +1,31 @@
 import Cardbox from "./cardbox.jsx";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import dummy from "../scripts/dummy.json";
 import utils from "../scripts/utils.js";
 console.log(dummy);
 function App() {
   const [dif, setDif] = useState("easy");
   const [currentRecord, setCurrentRecord] = useState(new Set());
-  // const [currentList, setCurrentList] = useState(null);
-  const [lists, setLists] = useState(null);
+  const [currentList, setCurrentList] = useState(null);
+
+  const li = useRef({});
   // TODO
   // get one list at a time to fix performance issue
-  if (!lists) utils.getLists().then((v) => setLists(v));
+  if (!li.current.easy) {
+    utils.fetchItems(1, 12).then(promiseHandler);
+  }
+  if (!li.current.medium) {
+    utils.fetchItems(100, 20).then(promiseHandler);
+  }
+  if (!li.current.hard) {
+    utils.fetchItems(300, 40).then(promiseHandler);
+  }
+  function promiseHandler(v) {
+    let difToSet =
+      v.length === 12 ? "easy" : v.length === 20 ? "medium" : "hard";
+    li.current[difToSet] = v;
+    if (dif === difToSet) setCurrentList(li.current[difToSet]);
+  }
 
   function handleImgClick(url) {
     const newSet = new Set(currentRecord);
@@ -22,6 +37,7 @@ function App() {
   function handleDifChange(dif) {
     setCurrentRecord(new Set());
     setDif(dif);
+    setCurrentList(li.current[dif]);
   }
   // used only once
   //
@@ -68,10 +84,7 @@ function App() {
         </div>
       </div>
       <div className="bottom">
-        <Cardbox
-          list={!lists ? null : lists[dif]}
-          handleImgClick={handleImgClick}
-        ></Cardbox>
+        <Cardbox list={currentList} handleImgClick={handleImgClick}></Cardbox>
       </div>
     </>
   );
