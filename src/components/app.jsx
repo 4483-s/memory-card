@@ -4,35 +4,49 @@ import dummy from "../scripts/dummy.json";
 import utils from "../scripts/utils.js";
 console.log(dummy);
 function App() {
+  const easyN = 3;
+  const mediumN = 4;
+  const hardN = 5;
   const [dif, setDif] = useState("easy");
+  const [record, setRecord] = useState({ easy: 0, medium: 0, hard: 0 });
   const [currentRecord, setCurrentRecord] = useState(new Set());
+
   const [, forceRender] = useState(0);
   const li = useRef({});
 
   const rerender = () => forceRender((x) => x + 1);
 
   if (!li.current.easy) {
-    utils.fetchItems(1, 12).then(promiseHandler);
+    utils.fetchItems(1, easyN).then(promiseHandler);
   }
   if (!li.current.medium) {
-    utils.fetchItems(100, 20).then(promiseHandler);
+    utils.fetchItems(100, mediumN).then(promiseHandler);
   }
   if (!li.current.hard) {
-    utils.fetchItems(300, 40).then(promiseHandler);
+    utils.fetchItems(300, hardN).then(promiseHandler);
   }
   function promiseHandler(v) {
     let difToSet =
-      v.length === 12 ? "easy" : v.length === 20 ? "medium" : "hard";
+      v.length === easyN ? "easy" : v.length === mediumN ? "medium" : "hard";
     li.current[difToSet] = v;
     if (difToSet === dif) rerender();
   }
 
   function handleImgClick(url) {
+    if (currentRecord.has(url)) {
+      setCurrentRecord(new Set());
+      return;
+    }
     const newSet = new Set(currentRecord);
-    if (newSet.has(url)) newSet.clear();
-    else newSet.add(url);
+    newSet.add(url);
+    if (newSet.size === li.current[dif].length) {
+      setCurrentRecord(new Set());
+    } else {
+      setCurrentRecord(newSet);
+    }
 
-    setCurrentRecord(newSet);
+    if (newSet.size >= record[dif])
+      setRecord({ ...record, [dif]: newSet.size });
   }
   function handleDifChange(difarg) {
     if (difarg === dif) return;
@@ -68,19 +82,22 @@ function App() {
   return (
     <>
       <div className="top">
-        <h1 className="title">Title</h1>
+        <h1 className="title">
+          Title:{currentRecord.size}/
+          {dif === "easy" ? easyN : dif === "medium" ? mediumN : hardN}
+        </h1>
         <div className="buttons">
           <button onClick={() => handleDifChange("hard")}>
             <h3>Hard</h3>
-            <p>best:</p>
+            <p>best:{`${record.hard}/${hardN}`}</p>
           </button>
           <button onClick={() => handleDifChange("medium")}>
             <h3>Medium</h3>
-            <p>best:</p>
+            <p>best:{`${record.medium}/${mediumN}`}</p>
           </button>
           <button onClick={() => handleDifChange("easy")}>
             <h3>Easy</h3>
-            <p>best:</p>
+            <p>best:{`${record.easy}/${easyN}`}</p>
           </button>
         </div>
       </div>
