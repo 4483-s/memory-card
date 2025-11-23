@@ -12,6 +12,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+* {
+  box-sizing: border-box;
+}
 #root {
   min-width: 80%;
   margin: 0 auto;
@@ -42,6 +45,7 @@ h1 {
   justify-content: space-between;
   width: 100%;
   align-items: center;
+  margin-bottom: 2em;
 }
 .buttons {
   display: flex;
@@ -118,6 +122,25 @@ button:hover {
 }
 button:focus {
   outline: 4px auto -webkit-focus-ring-color;
+}
+[alt="loading"] {
+  position: absolute;
+  margin: auto;
+  width: 200px;
+}
+.bottom {
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+@media (max-width: 800px) {
+  h1 {
+    margin: 0.1em;
+  }
+  .top {
+    flex-direction: column;
+    margin-bottom: 0.5em;
+  }
 }
 
 @media (prefers-color-scheme: light) {
