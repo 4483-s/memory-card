@@ -1,12 +1,12 @@
 import Cardbox from "./cardbox.jsx";
 import { useState, useRef } from "react";
-import dummy from "../scripts/dummy.json";
+// import dummy from "../scripts/dummy.json";
 import utils from "../scripts/utils.js";
-console.log(dummy);
+// console.log(dummy);
 function App() {
-  const easyN = 3;
-  const mediumN = 4;
-  const hardN = 5;
+  const easyN = 15;
+  const mediumN = 20;
+  const hardN = 40;
   const [dif, setDif] = useState("easy");
   const [record, setRecord] = useState({ easy: 0, medium: 0, hard: 0 });
   const [currentRecord, setCurrentRecord] = useState(new Set());
@@ -67,11 +67,13 @@ function App() {
   }
   if (!initialised) {
     return (
-      <div>
+      <div className="init">
         <h1>Select a difficulty</h1>
-        <button onClick={() => handleInit("hard")}>Hard</button>
-        <button onClick={() => handleInit("medium")}>Medium</button>
-        <button onClick={() => handleInit("easy")}>Easy</button>
+        <div className="init-buttons">
+          <button onClick={() => handleInit("hard")}>Hard</button>
+          <button onClick={() => handleInit("medium")}>Medium</button>
+          <button onClick={() => handleInit("easy")}>Easy</button>
+        </div>
       </div>
     );
   }
@@ -82,8 +84,9 @@ function App() {
   return (
     <>
       <div className="top">
+        <h1>Memory Card</h1>
         <h1 className="title">
-          Title:{currentRecord.size}/
+          Score: {currentRecord.size}/
           {dif === "easy" ? easyN : dif === "medium" ? mediumN : hardN}
         </h1>
         <div className="buttons">
